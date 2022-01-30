@@ -11,10 +11,11 @@ let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --no-ignore-vcs'
 " Set options viewable by using :set all
 " Or help for individual configs can be accessed :help <name>
 set nocompatible
-set redrawtime=10000
-"set background=dark
+"set redrawtime=10000
 set laststatus=2
 set noerrorbells
+set visualbell
+set t_vb=
 set tabstop=2 softtabstop=2
 set shiftwidth=2
 set expandtab
@@ -32,17 +33,22 @@ set cursorline
 "set colorcolumn=100
 
 " Column color set to grey
-"highlight ColorColumn ctermbg=1
-highlight Normal guibg=none guifg=none
+hi Normal guibg=NONE ctermbg=NONE
 
 " Plugins
 call plug#begin('~/.vim/plugged')
+
+" Checklists
+Plug 'evansalter/vim-checklist'
 
 " Make your Vim/Neovim as smart as VSCode
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Formatter
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+
+" buffer-line
+Plug 'bling/vim-bufferline'
 
 " Comment and uncomment lines
 Plug 'preservim/nerdcommenter'
@@ -98,8 +104,8 @@ nmap <leader><leader>u :UndotreeToggle<cr>
 nmap <leader><leader>f :Files<cr>
 nmap <leader><leader><leader>g :GoMetaLinter<cr>
 nnoremap <C-p> :GFiles<CR>
-nnoremap <leader><leader>c :call NERDComment(0,"toggle")<CR>
-vnoremap <leader><leader>c :call NERDComment(0,"toggle")<CR>
+nnoremap <leader><leader>c :call nerdcommenter#Comment(0,"toggle")<CR>
+vnoremap <leader><leader>d :call nerdcommenter#Comment(0,"toggle")<CR>
 nnoremap <leader><Tab> :bnext<CR>
 nnoremap <leader><Tab><Tab> :bprevious<CR>
 
@@ -276,6 +282,10 @@ let g:prettier#exec_cmd_path = "~/.vim/plugged/vim-prettier/node_modules/prettie
 let g:prettier#config#print_width = 100 " default is 'auto'
 
 " Colorscheme (For gruvbox $TERM env var needs to be xterm-256color)
-autocmd vimenter * ++nested colorscheme monochrome
+"autocmd vimenter * ++nested colorscheme monochrome
+autocmd vimenter * ++nested colorscheme Atelier_LakesideDark
 " Debug python
 autocmd FileType python map <buffer> <leader><leader>r :w<CR>:exec '!clear && python3' shellescape(@%,1)<CR>
+
+"nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
+"vnoremap <leader>ct :ChecklistToggleCheckbox<cr>
