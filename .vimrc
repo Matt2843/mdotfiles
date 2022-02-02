@@ -29,11 +29,6 @@ set incsearch
 set relativenumber
 set cursorline
 
-" Column set to column 100
-"set colorcolumn=100
-
-" Column color set to grey
-hi Normal guibg=NONE ctermbg=NONE
 
 " Plugins
 call plug#begin('~/.vim/plugged')
@@ -46,6 +41,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Formatter
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+
+" schemes
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'mhartington/oceanic-next'
 
 " buffer-line
 Plug 'bling/vim-bufferline'
@@ -72,12 +71,6 @@ Plug 'junegunn/fzf.vim'
 " This plugin adds Go language support for Vim, with many features
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
-" Python code formatter
-Plug 'ambv/black'
-
-" Gruvbox color theme
-Plug 'morhetz/gruvbox'
-
 " Vim-monokai-tasty color theme
 Plug 'patstockwell/vim-monokai-tasty'
 
@@ -98,7 +91,6 @@ nmap <leader>gr <Plug>(coc-references)
 nmap <leader>t :NERDTree<cr>
 nmap <leader><leader>p :Prettier<cr>
 nmap <leader><leader>g :GoFmt<cr>
-nmap <leader><leader>b :Black<cr>
 nmap <leader><leader>u :UndotreeToggle<cr>
 " Files (runs $FZF_DEFAULT_COMMAND if defined)
 nmap <leader><leader>f :Files<cr>
@@ -246,10 +238,10 @@ xmap <silent> <C-s> <Plug>(coc-range-select)
 command! -nargs=0 Format :call CocAction('format')
 
 " Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -283,9 +275,23 @@ let g:prettier#config#print_width = 100 " default is 'auto'
 
 " Colorscheme (For gruvbox $TERM env var needs to be xterm-256color)
 "autocmd vimenter * ++nested colorscheme monochrome
-autocmd vimenter * ++nested colorscheme Atelier_LakesideDark
+"autocmd vimenter * ++nested colorscheme Atelier_LakesideDark
+
 " Debug python
 autocmd FileType python map <buffer> <leader><leader>r :w<CR>:exec '!clear && python3' shellescape(@%,1)<CR>
+" Debug rust
+autocmd FileType rust map <buffer> <leader><leader>b :w<CR>:exec '!clear && cargo build'<CR>
+autocmd FileType rust map <buffer> <leader><leader>r :w<CR>:exec '!clear && cargo run'<CR>
 
-"nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
-"vnoremap <leader>ct :ChecklistToggleCheckbox<cr>
+" styling..
+if (has("termguicolors"))
+  set termguicolors
+endif
+let g:oceanic_next_terminal_bold = 1
+let g:oceanic_next_terminal_italic = 1
+colorscheme OceanicNext
+hi Normal guibg=NONE ctermbg=NONE
+hi LineNr guibg=NONE ctermbg=NONE
+hi SignColumn guibg=NONE ctermbg=NONE
+hi EndOfBuffer guibg=NONE ctermbg=NONE
+"hi normal guibg=none ctermbg=none
